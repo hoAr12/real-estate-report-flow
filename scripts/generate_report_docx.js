@@ -24,32 +24,32 @@ function mergePartFiles(partFiles) {
     return merged;
 }
 
-// 如果INPUT_MD不存在，尝试从Part文件合并
+// 如果INPUT_MD不存在，从环境变量REPORT_PROJECT_DIR指定的项目目录查找Part文件
+const REPORT_PROJECT_DIR = process.env.REPORT_PROJECT_DIR || '';
 let markdownContent;
 if (!fs.existsSync(INPUT_MD)) {
-    // 尝试从项目cases目录查找Part文件
-    const workspaceRoot = path.resolve(__dirname, '..');
-    const casesDir = path.join(workspaceRoot, 'memory', 'core_workflows', 'cases');
-    const projectDirs = fs.existsSync(casesDir) ? fs.readdirSync(casesDir) : [];
-    let partFiles = [];
-    
-    for (const projDir of projectDirs) {
-        const projPath = path.join(casesDir, projDir);
-        if (!fs.statSync(projPath).isDirectory()) continue;
-        const files = fs.readdirSync(projPath)
-            .filter(f => f.match(/Part\d+_v0\.[12]\.md/))
-            .sort()
-            .map(f => path.join(projPath, f));
-        partFiles = partFiles.concat(files);
+    if (!REPORT_PROJECT_DIR) {
+        console.error('错误：找不到报告文件，请设置环境变量 REPORT_MD 或 REPORT_PROJECT_DIR');
+        console.error('  REPORT_MD=reports/MyReport.md          — 直接指定报告文件路径');
+        console.error('  REPORT_PROJECT_DIR=cases/ProjectName/  — 指定项目目录（将从Part文件合并）');
+        process.exit(1);
     }
+    const projPath = path.resolve(REPORT_PROJECT_DIR);
+    if (!fs.existsSync(projPath) || !fs.statSync(projPath).isDirectory()) {
+        console.error(`错误：项目目录不存在: ${projPath}`);
+        process.exit(1);
+    }
+    const partFiles = fs.readdirSync(projPath)
+        .filter(f => f.match(/Part\d+_v0\.[12]\.md/))
+        .sort()
+        .map(f => path.join(projPath, f));
     
     if (partFiles.length > 0) {
         markdownContent = mergePartFiles(partFiles);
-        // 保存合并后的文件供参考
         fs.writeFileSync(INPUT_MD, markdownContent);
-        console.log(`已合并 ${partFiles.length} 个Part文件，并删除交互内容`);
+        console.log(`已合并 ${partFiles.length} 个Part文件: ${projPath}`);
     } else {
-        console.error('错误：找不到Part文件');
+        console.error(`错误：指定目录中找不到Part文件: ${projPath}`);
         process.exit(1);
     }
 } else {
@@ -310,9 +310,9 @@ const doc = new Document({
 Packer.toBuffer(doc).then(buffer => {
     fs.writeFileSync(OUTPUT_DOCX, buffer);
     // 清理 Word 默认样式（防止字号/字体覆盖脚本设置）
-    const { execSync } = require('child_process');
+    const { execFileSync } = require('child_process');
     try {
-        execSync(`python3 "${__dirname}/clean_docx_styles.py" "${OUTPUT_DOCX}"`, { stdio: 'inherit' });
+        execFileSync('python3', [path.join(__dirname, 'clean_docx_styles.py'), OUTPUT_DOCX], { stdio: 'inherit' });
     } catch (e) {}
     console.log('Word document generated successfully!');
 }).catch(err => {

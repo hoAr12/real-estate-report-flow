@@ -1,13 +1,13 @@
-# 房地产市场调查报告撰写决策链
+# 房地产市场调查报告撰写工作流
 
 > 面向 AI 助手的专业房地产市场调研报告撰写工作流框架
 
-[![Version](https://img.shields.io/badge/version-v1.5-blue)](https://github.com/hoAr12/real-estate-report-chain)
+[![Version](https://img.shields.io/badge/version-v1.5-blue)](https://github.com/hoAr12/real-estate-report-flow)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ## 这是什么
 
-一套经过 3 个完整项目验证的房地产市场调查报告撰写方法论——不是模板，而是让 AI 助手能够按照专业咨询标准自动完成报告的**决策链工作流**。
+一套经过 3 个完整项目验证的房地产市场调查报告撰写方法论——不是模板，而是让 AI 助手能够按照专业咨询标准自动完成报告的**工作流**。
 
 **覆盖物业类型**：住宅 / 商业 / 办公 / 工业（含 REITs 专项）
 
@@ -15,10 +15,10 @@
 
 ### 方式一：OpenClaw Skill（推荐）
 
-1. 下载 `real-estate-report-chain.skill`
+1. 下载 `real-estate-report-flow.skill`
 2. 在 OpenClaw 中安装：
    ```bash
-   openclaw skill install real-estate-report-chain.skill
+   openclaw skill install real-estate-report-flow.skill
    ```
 3. 直接对话："帮我写一份深圳南山区写字楼市场调研报告"
 
@@ -51,16 +51,9 @@ Step 5 项目收尾 ←── Step 4 排版导出 ←── Step 3 质量审核
      └──────── 冲突时专项优先 ─┘
 ```
 
-## Demo 案例
+## 验证数据
 
-[前海交易广场T4T5公寓市场调研报告](references/demo_case_qianhai.md) — 完整展示从定义到交付的全流程。
-
-| 指标 | 数值 |
-|------|------|
-| 物业类型 | 商务公寓 / 5.5万㎡ / 建设期 |
-| 报告体量 | 6章 × 61节，~40,600字，38表格 |
-| 差异化 | 深港融合 + 跨境需求 + 双轨售价测算 |
-| 审核结果 | 87/100 |
+本工作流已通过 3 个完整项目实战验证（住宅/商务公寓/商业 REITs），报告体量 38,000~51,000 字，综合审核评分 87+。
 
 ## 环境依赖
 
