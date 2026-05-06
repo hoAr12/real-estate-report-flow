@@ -20,7 +20,7 @@
    ```bash
    openclaw skill install real-estate-report-flow.skill
    ```
-3. 直接对话："帮我写一份深圳南山区写字楼市场调研报告"
+3. 直接对话："帮我写一份深圳南山区XX写字楼市场调研报告"
 
 ### 方式二：手动集成
 
